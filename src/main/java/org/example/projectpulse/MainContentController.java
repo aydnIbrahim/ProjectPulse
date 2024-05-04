@@ -1,11 +1,8 @@
 package org.example.projectpulse;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class MainContentController {
 
@@ -28,6 +25,7 @@ public class MainContentController {
 
     @FXML
     public void initialize() {
+
         projectTab.setOnAction(event -> handleButtonClick(projectTab));
         reportsButton.setOnAction(event -> handleButtonClick(reportsButton));
         tasksButton.setOnAction(event -> handleButtonClick(tasksButton));

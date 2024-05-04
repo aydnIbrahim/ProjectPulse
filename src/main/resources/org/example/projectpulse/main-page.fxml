@@ -23,27 +23,27 @@
                   </Label>
                </children>
             </HBox>
-            <Button fx:id="msocialTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="msocial" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button fx:id="todolistTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="To-Do-List" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="todolist" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="To-Do-List" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button fx:id="drugtrackingsystemTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="Drug Tracking System" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="drugtrackingsystem" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="Drug Tracking System" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button fx:id="recipegenTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="RecipeGen" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="recipegen" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="RecipeGen" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button fx:id="carcounterTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="CarCounter" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="carcounter" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="CarCounter" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>

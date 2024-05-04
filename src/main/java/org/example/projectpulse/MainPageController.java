@@ -10,34 +10,35 @@ import java.io.IOException;
 
 public class MainPageController {
 
-    @FXML
-    private Button carcounterTab;
 
     @FXML
-    private Button drugtrackingsystemTab;
+    private Button carcounter;
+
+    @FXML
+    private Button drugtrackingsystem;
 
     @FXML
     private AnchorPane mainPageAnchor;
 
     @FXML
-    private Button msocialTab;
+    private Button msocial;
 
     @FXML
-    private Button recipegenTab;
+    private Button recipegen;
 
     @FXML
-    private Button todolistTab;
+    private Button todolist;
 
     private Button selectedButton;
 
     @FXML
     public void initialize() {
 
-        carcounterTab.setOnAction(event -> handleButtonClick(carcounterTab));
-        drugtrackingsystemTab.setOnAction(event -> handleButtonClick(drugtrackingsystemTab));
-        msocialTab.setOnAction(event -> handleButtonClick(msocialTab));
-        recipegenTab.setOnAction(event -> handleButtonClick(recipegenTab));
-        todolistTab.setOnAction(event -> handleButtonClick(todolistTab));
+        carcounter.setOnAction(event -> handleButtonClick(carcounter));
+        drugtrackingsystem.setOnAction(event -> handleButtonClick(drugtrackingsystem));
+        msocial.setOnAction(event -> handleButtonClick(msocial));
+        recipegen.setOnAction(event -> handleButtonClick(recipegen));
+        todolist.setOnAction(event -> handleButtonClick(todolist));
     }
 
     private void handleButtonClick(Button clickedButton) {
@@ -48,12 +49,12 @@ public class MainPageController {
         selectedButton = clickedButton;
         selectedButton.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #C0C0C0; -fx-border-radius: 10; -fx-text-fill: #C0C0C0");
 
-        loadContent();
+        loadContent(clickedButton.getId());
     }
 
-    private void loadContent() {
+    private void loadContent(String buttonId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("main-content.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId + ".fxml"));
             BorderPane content = loader.load();
             mainPageAnchor.getChildren().setAll(content.getChildren());
         } catch (IOException e) {
