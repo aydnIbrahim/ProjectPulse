@@ -4,11 +4,11 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projectpulse.controllers.MainPageController">
    <left>
@@ -23,27 +23,27 @@
                   </Label>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transperent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="msocialTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transperent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="To-Do-List" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="todolistTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="To-Do-List" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transperent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="Drug Tracking System" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="drugtrackingsystemTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="Drug Tracking System" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transperent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="RecipeGen" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="recipegenTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="RecipeGen" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transperent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="CarCounter" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="carcounterTab" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="CarCounter" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
@@ -54,4 +54,7 @@
          </padding>
       </VBox>
    </left>
+   <center>
+      <AnchorPane fx:id="mainPageAnchor" prefHeight="400.0" prefWidth="450.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>
