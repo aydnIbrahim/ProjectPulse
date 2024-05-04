@@ -10,11 +10,6 @@ import java.io.IOException;
 
 public class MainPageController {
 
-
-
-    @FXML
-    private Button carcounter;
-
     @FXML
     private Button dependency;
 
@@ -31,9 +26,6 @@ public class MainPageController {
     private Button project;
 
     @FXML
-    private Button recipegen;
-
-    @FXML
     private Button task;
 
     @FXML
@@ -46,10 +38,8 @@ public class MainPageController {
     @FXML
     public void initialize() {
 
-        carcounter.setOnAction(event -> handleButtonClick(carcounter));
         drugtrackingsystem.setOnAction(event -> handleButtonClick(drugtrackingsystem));
         msocial.setOnAction(event -> handleButtonClick(msocial));
-        recipegen.setOnAction(event -> handleButtonClick(recipegen));
         todolist.setOnAction(event -> handleButtonClick(todolist));
         project.setOnAction(actionEvent -> handleButtonBarClick(project));
         dependency.setOnAction(actionEvent -> handleButtonBarClick(dependency));
@@ -86,7 +76,7 @@ public class MainPageController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId1 + buttonId2 + ".fxml"));
             BorderPane content = loader.load();
-            mainPageAnchor.getChildren().setAll(content.getChildren());
+            mainPageAnchor.getChildren().setAll(content);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
