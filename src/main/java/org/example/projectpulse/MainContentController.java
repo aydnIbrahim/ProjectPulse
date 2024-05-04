@@ -1,4 +1,4 @@
-package org.example.projectpulse.controllers;
+package org.example.projectpulse;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
