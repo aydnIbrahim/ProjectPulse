@@ -11,8 +11,12 @@ import java.io.IOException;
 public class MainPageController {
 
 
+
     @FXML
     private Button carcounter;
+
+    @FXML
+    private Button dependency;
 
     @FXML
     private Button drugtrackingsystem;
@@ -24,12 +28,20 @@ public class MainPageController {
     private Button msocial;
 
     @FXML
+    private Button project;
+
+    @FXML
     private Button recipegen;
+
+    @FXML
+    private Button task;
 
     @FXML
     private Button todolist;
 
     private Button selectedButton;
+
+    private Button selectedButtonBar;
 
     @FXML
     public void initialize() {
@@ -39,6 +51,9 @@ public class MainPageController {
         msocial.setOnAction(event -> handleButtonClick(msocial));
         recipegen.setOnAction(event -> handleButtonClick(recipegen));
         todolist.setOnAction(event -> handleButtonClick(todolist));
+        project.setOnAction(actionEvent -> handleButtonBarClick(project));
+        dependency.setOnAction(actionEvent -> handleButtonBarClick(dependency));
+        task.setOnAction(actionEvent -> handleButtonBarClick(task));
     }
 
     private void handleButtonClick(Button clickedButton) {
@@ -49,16 +64,38 @@ public class MainPageController {
         selectedButton = clickedButton;
         selectedButton.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #C0C0C0; -fx-border-radius: 10; -fx-text-fill: #C0C0C0");
 
-        loadContent(clickedButton.getId());
+        project.setText(clickedButton.getText());
+
+        mainPageAnchor.getChildren().clear();
+        handleButtonBarClean();
     }
 
-    private void loadContent(String buttonId) {
+    private void handleButtonBarClick(Button clickedButton) {
+        if (selectedButtonBar != null) {
+            selectedButtonBar.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
+        }
+
+        selectedButtonBar = clickedButton;
+        selectedButtonBar.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: white; -fx-border-radius: 10; -fx-text-fill: white");
+
+        loadContent(selectedButton.getId(), selectedButtonBar.getId());
+    }
+
+    private void loadContent(String buttonId1, String buttonId2){
+        mainPageAnchor.getChildren().clear();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId + ".fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId1 + buttonId2 + ".fxml"));
             BorderPane content = loader.load();
             mainPageAnchor.getChildren().setAll(content.getChildren());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
+    private void handleButtonBarClean(){
+        project.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
+        dependency.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
+        task.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
+    }
+
 }

@@ -14,16 +14,7 @@
    <left>
       <VBox prefHeight="400.0" prefWidth="150.0" spacing="5.0" style="-fx-background-color: #234232;" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="181.0">
-               <children>
-                  <Label text="Projects" textFill="WHITE">
-                     <font>
-                        <Font name="AppleMyungjo Regular" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <Button fx:id="msocial" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
+            <Button fx:id="msocial" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10; -fx-text-fill: #fff;" text="MSocial" textAlignment="CENTER" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor>
@@ -50,11 +41,33 @@
             </Button>
          </children>
          <padding>
-            <Insets left="5.0" right="5.0" />
+            <Insets left="5.0" right="5.0" top="10.0" />
          </padding>
       </VBox>
    </left>
    <center>
-      <AnchorPane fx:id="mainPageAnchor" prefHeight="400.0" prefWidth="450.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="mainPageAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="450.0" BorderPane.alignment="CENTER" />
    </center>
+   <top>
+      <HBox prefHeight="47.0" prefWidth="600.0" style="-fx-background-color: #234232;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="150.0">
+               <children>
+                  <Label text="Projects" textFill="WHITE">
+                     <font>
+                        <Font name="AppleMyungjo Regular" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="47.0" prefWidth="454.0" spacing="10.0">
+               <children>
+                  <Button fx:id="project" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-radius: 10;" text="MSocial" textFill="WHITE" />
+                  <Button fx:id="dependency" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-radius: 10;" text="Dependencies" textFill="WHITE" />
+                  <Button fx:id="task" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-radius: 10;" text="Tasks" textFill="WHITE" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
 </BorderPane>
