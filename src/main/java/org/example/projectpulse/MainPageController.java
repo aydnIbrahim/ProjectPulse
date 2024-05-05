@@ -37,7 +37,6 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
-
         drugtrackingsystem.setOnAction(event -> handleButtonClick(drugtrackingsystem));
         msocial.setOnAction(event -> handleButtonClick(msocial));
         todolist.setOnAction(event -> handleButtonClick(todolist));
@@ -52,7 +51,7 @@ public class MainPageController {
         }
 
         selectedButton = clickedButton;
-        selectedButton.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #C0C0C0; -fx-border-radius: 10; -fx-text-fill: #C0C0C0");
+        selectedButton.setStyle("-fx-background-color: #fff; -fx-border-color: #fff; -fx-text-fill: #234232; -fx-border-radius: 10; -fx-background-radius: 10");
 
         project.setText(clickedButton.getText());
 
