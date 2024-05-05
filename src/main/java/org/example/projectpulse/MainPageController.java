@@ -35,6 +35,8 @@ public class MainPageController {
 
     private Button selectedButtonBar;
 
+    private static String author;
+
     @FXML
     public void initialize() {
         drugtrackingsystem.setOnAction(event -> handleButtonClick(drugtrackingsystem));
@@ -73,6 +75,7 @@ public class MainPageController {
     private void loadContent(String buttonId1, String buttonId2){
         mainPageAnchor.getChildren().clear();
         try {
+            author = buttonId1;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId1 + buttonId2 + ".fxml"));
             BorderPane content = loader.load();
             mainPageAnchor.getChildren().setAll(content);
@@ -87,4 +90,7 @@ public class MainPageController {
         task.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
     }
 
+    public static String getAuthor() {
+        return author;
+    }
 }

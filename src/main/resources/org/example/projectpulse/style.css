@@ -1,0 +1,3 @@
+.list-cell:focused:selected {
+    -fx-background-color: rgba(0, 0, 0, 0.28);
+}
