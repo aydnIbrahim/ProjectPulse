@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MSocialTaskController {
 
@@ -22,13 +24,31 @@ public class MSocialTaskController {
     private Button addButton;
 
     @FXML
+    private Button completedTasks;
+
+    @FXML
+    private MenuItem green;
+
+    @FXML
     private TextField newTaskField;
+
+    @FXML
+    private MenuItem orange;
+
+    @FXML
+    private MenuButton priorityMenu;
+
+    @FXML
+    private ImageView priorityView;
+
+    @FXML
+    private MenuItem red;
 
     @FXML
     private ListView<HBox> taskList;
 
     @FXML
-    private Button completedTasks;
+    private MenuItem yellow;
 
 
     @FXML
@@ -49,6 +69,12 @@ public class MSocialTaskController {
 
         taskList.setOnMouseClicked(event -> handleTaskListSelection());
         taskList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setInvisibleCompletedButtons());
+
+        red.setOnAction(event -> handlePriorityView(red));
+        orange.setOnAction(event -> handlePriorityView(orange));
+        yellow.setOnAction(event -> handlePriorityView(yellow));
+        green.setOnAction(event -> handlePriorityView(green));
+
     }
 
     private void handleAddClick() throws SQLException {
@@ -58,6 +84,14 @@ public class MSocialTaskController {
             task.setAuthor(MainPageController.getAuthor());
             task.setContent(newTask);
             task.setCompleted(0);
+            task.setPriorityPath(priorityView.getImage().getUrl());
+            System.out.println(priorityView.getImage().getUrl());
+            Pattern pattern = Pattern.compile("Resourcees/(.*?)\\.png");
+            Matcher matcher = pattern.matcher(priorityView.getImage().getUrl());
+            if(matcher.find()){
+                task.setPriorityPath(matcher.group(0));
+                System.out.println(matcher.group(0));
+            }
 
             TaskDao taskDao = new TaskDao();
             taskDao.saveTask(task);
@@ -165,5 +199,10 @@ public class MSocialTaskController {
             if (task.getCompleted() != 1)
                 addNewTask(task.getContent());
         }
+    }
+
+    private void handlePriorityView(MenuItem menuItem) {
+        String id = menuItem.getId();
+        priorityView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/" + id + ".circle.fill.priority.view.png"))));
     }
 }

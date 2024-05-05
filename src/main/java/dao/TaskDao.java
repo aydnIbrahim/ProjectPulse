@@ -29,10 +29,12 @@ public class TaskDao {
 
     public void saveTask(Task task) throws SQLException {
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO tasks (author, content, completed) VALUES (?, ?, ?)");
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO tasks (author, content, completed, priority_path, priority_level) VALUES (?, ?, ?, ?, ?)");
         ps.setString(1, task.getAuthor());
         ps.setString(2, task.getContent());
         ps.setInt(3, task.getCompleted());
+        ps.setString(4, task.getPriorityPath());
+        ps.setInt(5, task.getPriorityLevel());
         ps.executeUpdate();
     }
 

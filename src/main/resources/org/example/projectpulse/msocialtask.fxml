@@ -21,15 +21,20 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="70.0" prefWidth="450.0" spacing="10.0" style="-fx-background-color: #fff;" BorderPane.alignment="CENTER">
          <children>
+            <ImageView fx:id="priorityView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Resources/green.circle.fill.priority.view.png" />
+               </image>
+            </ImageView>
             <TextField fx:id="newTaskField" prefHeight="28.0" prefWidth="332.0" promptText="Enter your task here" style="-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #234232; -fx-border-radius: 20;" />
-            <Button fx:id="addButton" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: #234232; -fx-border-width: 1px; -fx-border-radius: 10;" text="Add" textFill="#234232">
+            <Button fx:id="addButton" mnemonicParsing="false" prefHeight="28.0" prefWidth="64.0" style="-fx-background-color: transparent; -fx-border-color: #234232; -fx-border-width: 1px; -fx-border-radius: 10;" text="Add" textFill="#234232">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
             <MenuButton fx:id="priorityMenu" contentDisplay="GRAPHIC_ONLY" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="27.0" style="-fx-background-color: transparent;">
               <items>
-                <MenuItem mnemonicParsing="false">
+                <MenuItem fx:id="red" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -38,7 +43,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                <MenuItem mnemonicParsing="false">
+                <MenuItem fx:id="orange" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -47,7 +52,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false">
+                  <MenuItem fx:id="yellow" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -56,7 +61,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false">
+                  <MenuItem fx:id="green" mnemonicParsing="false">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>

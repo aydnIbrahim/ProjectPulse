@@ -6,6 +6,8 @@ public class Task {
     private String author;
     private String content;
     private int completed;
+    private int priorityLevel;
+    private String priorityPath;
 
 
     public Task() {}
@@ -47,5 +49,21 @@ public class Task {
 
     public void setCompleted(int completed) {
         this.completed = completed;
+    }
+
+    public String getPriorityPath() {
+        return priorityPath;
+    }
+
+    public void setPriorityPath(String priorityPath) {
+        this.priorityPath = priorityPath;
+    }
+
+    public int getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(int priorityLevel) {
+        this.priorityLevel = priorityLevel;
     }
 }
