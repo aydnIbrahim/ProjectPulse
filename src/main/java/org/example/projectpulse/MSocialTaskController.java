@@ -15,8 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class MSocialTaskController {
 
@@ -50,10 +49,13 @@ public class MSocialTaskController {
     @FXML
     private MenuItem yellow;
 
+    private String currentPriorityViewUrl;
+
 
     @FXML
     public void initialize() throws SQLException {
 
+        currentPriorityViewUrl = "Resources/green.circle.fill.priority.view.png";
         loadContent();
 
         addButton.setOnAction(event -> {
@@ -84,14 +86,15 @@ public class MSocialTaskController {
             task.setAuthor(MainPageController.getAuthor());
             task.setContent(newTask);
             task.setCompleted(0);
-            task.setPriorityPath(priorityView.getImage().getUrl());
-            System.out.println(priorityView.getImage().getUrl());
-            Pattern pattern = Pattern.compile("Resourcees/(.*?)\\.png");
-            Matcher matcher = pattern.matcher(priorityView.getImage().getUrl());
-            if(matcher.find()){
-                task.setPriorityPath(matcher.group(0));
-                System.out.println(matcher.group(0));
-            }
+            task.setPriorityPath(currentPriorityViewUrl);
+            if (currentPriorityViewUrl.equals("Resources/red.circle.fill.priority.view.png"))
+                task.setPriorityLevel(1);
+            if (currentPriorityViewUrl.equals("Resources/orange.circle.fill.priority.view.png"))
+                task.setPriorityLevel(2);
+            if (currentPriorityViewUrl.equals("Resources/yellow.circle.fill.priority.view.png"))
+                task.setPriorityLevel(3);
+            if (currentPriorityViewUrl.equals("Resources/green.circle.fill.priority.view.png"))
+                task.setPriorityLevel(4);
 
             TaskDao taskDao = new TaskDao();
             taskDao.saveTask(task);
@@ -203,6 +206,7 @@ public class MSocialTaskController {
 
     private void handlePriorityView(MenuItem menuItem) {
         String id = menuItem.getId();
+        currentPriorityViewUrl = "Resources/" + id + ".circle.fill.priority.view.png";
         priorityView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/" + id + ".circle.fill.priority.view.png"))));
     }
 }
