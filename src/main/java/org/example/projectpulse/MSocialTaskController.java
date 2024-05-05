@@ -27,6 +27,9 @@ public class MSocialTaskController {
     @FXML
     private ListView<HBox> taskList;
 
+    @FXML
+    private Button completedTasks;
+
 
     @FXML
     public void initialize() throws SQLException {
