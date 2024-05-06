@@ -16,6 +16,8 @@ public class TaskDao {
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM tasks WHERE author = ?");
         ps.setString(1, author);
         ResultSet rs = ps.executeQuery();
+
+        EmployeeDao empDao = new EmployeeDao();
         ArrayList<Task> tasks = new ArrayList<>();
         while (rs.next()) {
             Task t = new Task();
@@ -25,6 +27,8 @@ public class TaskDao {
             t.setCompleted(rs.getInt("completed"));
             t.setPriorityPath(rs.getString("priority_path"));
             t.setPriorityLevel(rs.getInt("priority_level"));
+            t.setAssignee(rs.getString("assignee"));
+            t.setAssigneePhotoPath(empDao.getAssigneePhotoPath(rs.getString("assignee")));
             tasks.add(t);
         }
         return tasks;
@@ -55,6 +59,15 @@ public class TaskDao {
         PreparedStatement ps = conn.prepareStatement("DELETE FROM tasks WHERE author = ? AND content = ?");
         ps.setString(1, author);
         ps.setString(2, content);
+        ps.executeUpdate();
+    }
+
+    public void updateAssignee(Task task) throws SQLException {
+        Connection conn = DBConnection.getInstance().getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE tasks SET assignee = ? WHERE author = ? AND content = ?");
+        ps.setString(1, task.getAssignee());
+        ps.setString(2, task.getAuthor());
+        ps.setString(3, task.getContent());
         ps.executeUpdate();
     }
 

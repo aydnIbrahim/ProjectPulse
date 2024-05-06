@@ -7,3 +7,5 @@ module org.example.projectpulse {
     opens org.example.projectpulse to javafx.fxml;
     exports org.example.projectpulse;
 }
+
+

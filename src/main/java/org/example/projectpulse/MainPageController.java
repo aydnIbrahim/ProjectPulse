@@ -55,8 +55,6 @@ public class MainPageController {
         selectedButton = clickedButton;
         selectedButton.setStyle("-fx-background-color: #fff; -fx-border-color: #fff; -fx-text-fill: #234232; -fx-border-radius: 10; -fx-background-radius: 10");
 
-        project.setText(clickedButton.getText());
-
         mainPageAnchor.getChildren().clear();
         handleButtonBarClean();
     }
@@ -74,14 +72,17 @@ public class MainPageController {
 
     private void loadContent(String buttonId1, String buttonId2){
         mainPageAnchor.getChildren().clear();
-        try {
-            author = buttonId1;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(buttonId1 + buttonId2 + ".fxml"));
-            BorderPane content = loader.load();
-            mainPageAnchor.getChildren().setAll(content);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (buttonId2.equals(task.getId())) {
+            try {
+                author = buttonId1;
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("tasks.fxml"));
+                BorderPane content = loader.load();
+                mainPageAnchor.getChildren().setAll(content);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
     private void handleButtonBarClean(){

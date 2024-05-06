@@ -8,6 +8,8 @@ public class Task {
     private int completed;
     private int priorityLevel;
     private String priorityPath;
+    private String assignee;
+    private String assigneePhotoPath;
 
 
     public Task() {}
@@ -65,5 +67,21 @@ public class Task {
 
     public void setPriorityLevel(int priorityLevel) {
         this.priorityLevel = priorityLevel;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getAssigneePhotoPath() {
+        return assigneePhotoPath;
+    }
+
+    public void setAssigneePhotoPath(String assigneePhotoPath) {
+        this.assigneePhotoPath = assigneePhotoPath;
     }
 }
