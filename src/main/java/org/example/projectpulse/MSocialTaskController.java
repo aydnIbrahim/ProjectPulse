@@ -79,6 +79,86 @@ public class MSocialTaskController {
 
     }
 
+    private void loadContent() throws SQLException {
+        ArrayList<Task> tasks;
+        TaskDao taskDao = new TaskDao();
+        tasks = taskDao.getAllTask(MainPageController.getAuthor());
+        for (Task task : tasks) {
+            if (task.getCompleted() != 1)
+                addNewTask(task);
+
+        }
+        sortTaskListToPriorityLevel();
+    }
+
+    private void addNewTask(Task task) {
+        HBox taskBox = new HBox();
+        Label taskLabel = new Label(task.getContent());
+        Button completedButton = new Button("Completed");
+        Button deleteButton = new Button();
+        Button tagButton = new Button();
+        Label priorityLabel = new Label("" + task.getPriorityLevel());
+
+        taskBox.setAlignment(Pos.CENTER_LEFT);
+        taskBox.setSpacing(5);
+        taskBox.setPadding(new Insets(0, 0, 0, 10));
+
+        taskLabel.setPrefSize(255, 17);
+
+        priorityLabel.setPrefSize(1, 1);
+        priorityLabel.setMinSize(1, 1);
+        priorityLabel.setVisible(false);
+
+        completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 10px; -fx-border-radius: 10");
+        completedButton.setPrefSize(62, 22);
+        completedButton.setCursor(Cursor.HAND);
+        completedButton.setVisible(false);
+
+        ImageView minusCircle = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.png"))));
+        ImageView minusCircleFill = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.fill.png"))));
+        deleteButton.setGraphic(minusCircle);
+        deleteButton.setStyle("-fx-background-color: transparent");
+        deleteButton.setCursor(Cursor.HAND);
+        deleteButton.setVisible(false);
+
+        ImageView tag = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(task.getPriorityPath()))));
+        tag.setFitWidth(15);
+        tag.setFitHeight(15);
+        tagButton.setGraphic(tag);
+        tagButton.setStyle("-fx-background-color: transparent");
+
+        completedButton.setOnMouseEntered(e -> completedButton.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 10px"));
+        completedButton.setOnMouseExited(e -> completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 10px; -fx-border-radius: 10"));
+        deleteButton.setOnMouseEntered(e -> deleteButton.setGraphic(minusCircleFill));
+        deleteButton.setOnMouseExited(e -> deleteButton.setGraphic(minusCircle));
+
+        taskBox.getChildren().addAll(tagButton, taskLabel, completedButton, deleteButton, priorityLabel);
+        taskList.getItems().add(taskBox);
+    }
+
+    private void sortTaskListToPriorityLevel() {
+        ArrayList<HBox> sortedBoxes = new ArrayList<>(taskList.getItems());
+
+        sortedBoxes.sort((box1, box2) -> {
+            Label label1 = (Label) box1.getChildren().getLast();
+            Label label2 = (Label) box2.getChildren().getLast();
+            int priorityLevel1 = Integer.parseInt(label1.getText());
+            int priorityLevel2 = Integer.parseInt(label2.getText());
+            return Integer.compare(priorityLevel1, priorityLevel2);
+        });
+
+        taskList.getItems().setAll(sortedBoxes);
+    }
+
+    private void setInvisibleCompletedButtons() {
+        for (HBox hBox : taskList.getItems()) {
+            Button completedButton = (Button) hBox.getChildren().get(2);
+            Button deleteButton = (Button) hBox.getChildren().get(3);
+            completedButton.setVisible(false);
+            deleteButton.setVisible(false);
+        }
+    }
+
     private void handleAddClick() throws SQLException {
         String newTask = newTaskField.getText();
         if(!newTask.isEmpty()){
@@ -99,50 +179,18 @@ public class MSocialTaskController {
             TaskDao taskDao = new TaskDao();
             taskDao.saveTask(task);
 
-            addNewTask(newTask);
+            addNewTask(task);
+            sortTaskListToPriorityLevel();
             newTaskField.clear();
         }
-    }
-
-    private void addNewTask(String newTask) {
-        HBox taskBox = new HBox();
-        Label taskLabel = new Label(newTask);
-        Button completedButton = new Button("Completed");
-        Button deleteButton = new Button();
-
-        taskBox.setAlignment(Pos.CENTER_LEFT);
-        taskBox.setSpacing(5);
-        taskBox.setPadding(new Insets(0, 10, 0, 10));
-
-        taskLabel.setPrefSize(290, 17);
-
-        completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 10px; -fx-border-radius: 10");
-        completedButton.setPrefSize(62, 22);
-        completedButton.setCursor(Cursor.HAND);
-        completedButton.setVisible(false);
-
-        ImageView minusCircle = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.png"))));
-        ImageView minusCircleFill = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.fill.png"))));
-        deleteButton.setGraphic(minusCircle);
-        deleteButton.setStyle("-fx-background-color: transparent");
-        deleteButton.setCursor(Cursor.HAND);
-        deleteButton.setVisible(false);
-
-        completedButton.setOnMouseEntered(e -> completedButton.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 10px"));
-        completedButton.setOnMouseExited(e -> completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 10px; -fx-border-radius: 10"));
-        deleteButton.setOnMouseEntered(e -> deleteButton.setGraphic(minusCircleFill));
-        deleteButton.setOnMouseExited(e -> deleteButton.setGraphic(minusCircle));
-
-        taskBox.getChildren().addAll(taskLabel, completedButton, deleteButton);
-        taskList.getItems().add(taskBox);
     }
 
     private void handleTaskListSelection() {
         HBox selectedTask = taskList.getSelectionModel().getSelectedItem();
         if (selectedTask != null) {
-            Label taskLabel = (Label) selectedTask.getChildren().getFirst();
-            Button completedButton = (Button) selectedTask.getChildren().get(1);
-            Button deleteButton = (Button) selectedTask.getChildren().get(2);
+            Label taskLabel = (Label) selectedTask.getChildren().get(1);
+            Button completedButton = (Button) selectedTask.getChildren().get(2);
+            Button deleteButton = (Button) selectedTask.getChildren().get(3);
             completedButton.setVisible(true);
             deleteButton.setVisible(true);
             completedButton.setOnAction(event -> {
@@ -154,33 +202,14 @@ public class MSocialTaskController {
                 }
             });
             deleteButton.setOnAction(event -> {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Delete Task");
-                alert.setHeaderText("Are you sure you want to delete this task?");
-
-                ButtonType buttonTypeYes = new ButtonType("Yes", ButtonBar.ButtonData.NO);
-                ButtonType buttonTypeNo = new ButtonType("No", ButtonBar.ButtonData.YES);
-                alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == buttonTypeYes) {
-                    try {
-                        handleTaskListDeleteButton(taskLabel.getText());
-                        taskList.getItems().remove(selectedTask);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                try {
+                    handleTaskListDeleteButton(taskLabel.getText());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-            });
-        }
-    }
+                taskList.getItems().remove(selectedTask);
 
-    private void setInvisibleCompletedButtons() {
-        for (HBox hBox : taskList.getItems()) {
-            Button completedButton = (Button) hBox.getChildren().get(1);
-            Button deleteButton = (Button) hBox.getChildren().get(2);
-            completedButton.setVisible(false);
-            deleteButton.setVisible(false);
+            });
         }
     }
 
@@ -192,16 +221,6 @@ public class MSocialTaskController {
     private void handleTaskListDeleteButton(String content) throws SQLException {
         TaskDao taskDao = new TaskDao();
         taskDao.deleteTask(MainPageController.getAuthor(), content);
-    }
-
-    private void loadContent() throws SQLException {
-        ArrayList<Task> tasks;
-        TaskDao taskDao = new TaskDao();
-        tasks = taskDao.getAllTask(MainPageController.getAuthor());
-        for (Task task : tasks) {
-            if (task.getCompleted() != 1)
-                addNewTask(task.getContent());
-        }
     }
 
     private void handlePriorityView(MenuItem menuItem) {

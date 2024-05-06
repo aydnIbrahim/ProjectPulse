@@ -13,15 +13,18 @@ public class TaskDao {
 
     public ArrayList<Task> getAllTask(String author) throws SQLException {
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT content, completed FROM tasks WHERE author = ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM tasks WHERE author = ?");
         ps.setString(1, author);
         ResultSet rs = ps.executeQuery();
         ArrayList<Task> tasks = new ArrayList<>();
         while (rs.next()) {
             Task t = new Task();
-            t.setAuthor(author);
+            t.setId(rs.getInt("id"));
+            t.setAuthor(rs.getString("author"));
             t.setContent(rs.getString("content"));
             t.setCompleted(rs.getInt("completed"));
+            t.setPriorityPath(rs.getString("priority_path"));
+            t.setPriorityLevel(rs.getInt("priority_level"));
             tasks.add(t);
         }
         return tasks;
