@@ -2,6 +2,8 @@ package org.example.projectpulse;
 
 import dao.EmployeeDao;
 import dao.TaskDao;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 import model.Employee;
 import model.Task;
 
@@ -30,39 +33,27 @@ public class MSocialTaskController {
     private Button completedTasks;
 
     @FXML
-    private MenuItem green;
-
-    @FXML
     private TextField newTaskField;
-
-    @FXML
-    private MenuItem orange;
-
-    @FXML
-    private MenuButton priorityMenu;
 
     @FXML
     private ImageView priorityView;
 
     @FXML
-    private MenuItem red;
-
-    @FXML
     private ListView<HBox> taskList;
 
     @FXML
-    private MenuItem yellow;
+    private Button priorityButton;
+
+    @FXML
+    private Label alertLabel;
 
     private String currentPriorityViewUrl;
-
-    private String currentAssigneeNameSurname;
 
 
     @FXML
     public void initialize() throws SQLException {
 
         currentPriorityViewUrl = "Resources/green.circle.fill.priority.view.png";
-        currentAssigneeNameSurname = "Idle Task";
         loadContent();
 
         addButton.setOnAction(event -> {
@@ -75,6 +66,8 @@ public class MSocialTaskController {
 
         addButton.setOnMouseEntered(e -> addButton.setStyle("-fx-background-color: #234232; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: white"));
         addButton.setOnMouseExited(e -> addButton.setStyle("-fx-background-color: transparent; -fx-border-color: #234232; -fx-border-radius: 10; -fx-border-width: 1px; -fx-text-fill: #234232;"));
+        completedTasks.setOnMouseEntered(e -> completedTasks.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white"));
+        completedTasks.setOnMouseExited(e -> completedTasks.setStyle("-fx-background-color: transparent; -fx-text-fill: #0D2BC1; -fx-border-color: #0D2BC1; -fx-border-radius: 10"));
 
         taskList.setOnMouseClicked(event -> {
             try {
@@ -84,11 +77,6 @@ public class MSocialTaskController {
             }
         });
         taskList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> setInvisibleCompletedButtons());
-
-        red.setOnAction(event -> handlePriorityView(red));
-        orange.setOnAction(event -> handlePriorityView(orange));
-        yellow.setOnAction(event -> handlePriorityView(yellow));
-        green.setOnAction(event -> handlePriorityView(green));
 
     }
 
@@ -197,29 +185,61 @@ public class MSocialTaskController {
 
     private void handleAddClick() throws SQLException {
         String newTask = newTaskField.getText();
-        if(!newTask.isEmpty()){
-            Task task = new Task();
-            task.setAuthor(MainPageController.getAuthor());
-            task.setContent(newTask);
-            task.setCompleted(0);
-            task.setPriorityPath(currentPriorityViewUrl);
-            if (currentPriorityViewUrl.equals("Resources/red.circle.fill.priority.view.png"))
-                task.setPriorityLevel(1);
-            if (currentPriorityViewUrl.equals("Resources/orange.circle.fill.priority.view.png"))
-                task.setPriorityLevel(2);
-            if (currentPriorityViewUrl.equals("Resources/yellow.circle.fill.priority.view.png"))
-                task.setPriorityLevel(3);
-            if (currentPriorityViewUrl.equals("Resources/green.circle.fill.priority.view.png"))
-                task.setPriorityLevel(4);
-            task.setAssignee("Idle Task");
-
+        if (!newTask.isEmpty()) {
             TaskDao taskDao = new TaskDao();
-            taskDao.saveTask(task);
+            ArrayList<String> existingContents = taskDao.getAllContents(MainPageController.getAuthor());
 
-            addNewTask(task);
-            sortTaskListToPriorityLevel();
-            newTaskField.clear();
+            boolean taskExists = false;
+            for (String content : existingContents) {
+                if (content.equals(newTask)) {
+                    taskExists = true;
+                    break;
+                }
+            }
+
+            if (!taskExists) {
+                Task task = getTaskForHandleAddClick(newTask);
+
+                taskDao.saveTask(task);
+
+                // Yeni görevi ekle ve listeyi yeniden sırala
+                addNewTask(task);
+                sortTaskListToPriorityLevel();
+                newTaskField.clear();
+            } else {
+                alertLabel.setText("Task already exists!");
+                alertLabel.setStyle("-fx-text-fill: #FF2600; -fx-font-size: 18px");
+
+                Timeline timeline = new Timeline(new KeyFrame(
+                        Duration.seconds(3),
+                        event -> setDefaultAlertLabel()
+                ));
+                timeline.play();
+            }
         }
+    }
+
+    private Task getTaskForHandleAddClick(String newTask) {
+        Task task = new Task();
+        task.setAuthor(MainPageController.getAuthor());
+        task.setContent(newTask);
+        task.setCompleted(0);
+        task.setPriorityPath(currentPriorityViewUrl);
+        if (currentPriorityViewUrl.equals("Resources/red.circle.fill.priority.view.png"))
+            task.setPriorityLevel(1);
+        if (currentPriorityViewUrl.equals("Resources/orange.circle.fill.priority.view.png"))
+            task.setPriorityLevel(2);
+        if (currentPriorityViewUrl.equals("Resources/yellow.circle.fill.priority.view.png"))
+            task.setPriorityLevel(3);
+        if (currentPriorityViewUrl.equals("Resources/green.circle.fill.priority.view.png"))
+            task.setPriorityLevel(4);
+        task.setAssignee("Idle Task");
+        return task;
+    }
+
+    private void setDefaultAlertLabel() {
+        alertLabel.setText("Task");
+        alertLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: #234232");
     }
 
     private void handleTaskListSelection() throws SQLException {
@@ -294,10 +314,9 @@ public class MSocialTaskController {
                 task.setAuthor(MainPageController.getAuthor());
                 task.setContent(content);
                 task.setAssignee(menuItem.getText());
-                currentAssigneeNameSurname = menuItem.getText();
                 assigneeLabel.setText(menuItem.getText());
 
-                ImageView assigneePhoto = null;
+                ImageView assigneePhoto;
                 try {
                     assigneePhoto = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(empDao.getAssigneePhotoPath(menuItem.getText())))));
                 } catch (SQLException e) {
@@ -322,9 +341,52 @@ public class MSocialTaskController {
                     contextMenu.getItems().add(menuItem);
                 }
                 contextMenu.show(assignButton, Side.BOTTOM, 0, 0);
-            } else {
-                contextMenu.hide();
-            }
+            } else contextMenu.hide();
         });
+    }
+
+    @FXML
+    private void handlePriorityButton() {
+        ContextMenu contextMenu = new ContextMenu();
+        if(!contextMenu.isShowing()) {
+            MenuItem red = new MenuItem();
+            MenuItem orange = new MenuItem();
+            MenuItem yellow = new MenuItem();
+            MenuItem green = new MenuItem();
+
+            red.setId("red");
+            orange.setId("orange");
+            yellow.setId("yellow");
+            green.setId("green");
+
+            red.setOnAction(event -> handlePriorityView(red));
+            orange.setOnAction(event -> handlePriorityView(orange));
+            yellow.setOnAction(event -> handlePriorityView(yellow));
+            green.setOnAction(event -> handlePriorityView(green));
+
+            ImageView redImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/red.circle.fill.priority.view.png"))));
+            ImageView orangeImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/orange.circle.fill.priority.view.png"))));
+            ImageView yellowImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/yellow.circle.fill.priority.view.png"))));
+            ImageView greenImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/green.circle.fill.priority.view.png"))));
+
+            redImage.setFitWidth(30); redImage.setFitHeight(30);
+            orangeImage.setFitWidth(30); orangeImage.setFitHeight(30);
+            yellowImage.setFitWidth(30); yellowImage.setFitHeight(30);
+            greenImage.setFitWidth(30); greenImage.setFitHeight(30);
+
+            red.setGraphic(redImage);
+            orange.setGraphic(orangeImage);
+            yellow.setGraphic(yellowImage);
+            green.setGraphic(greenImage);
+
+            contextMenu.getItems().addAll(red, orange, yellow, green);
+            contextMenu.show(priorityButton, Side.BOTTOM, 0, 0);
+
+        }
+        else contextMenu.hide();
+    }
+
+    private void handleCompletedTasksButton() {
+
     }
 }

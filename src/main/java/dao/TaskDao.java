@@ -3,11 +3,9 @@ package dao;
 import model.Task;
 import util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskDao {
 
@@ -47,10 +45,11 @@ public class TaskDao {
 
     public void completeTask(String author, String content) throws SQLException {
         Connection conn = DBConnection.getInstance().getConnection();
-        PreparedStatement ps = conn.prepareStatement("UPDATE tasks SET completed = ? WHERE author = ? AND content = ?");
+        PreparedStatement ps = conn.prepareStatement("UPDATE tasks SET completed = ?, completed_date = ? WHERE author = ? AND content = ?");
         ps.setInt(1, 1);
-        ps.setString(2, author);
-        ps.setString(3, content);
+        ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+        ps.setString(3, author);
+        ps.setString(4, content);
         ps.executeUpdate();
     }
 
@@ -69,6 +68,19 @@ public class TaskDao {
         ps.setString(2, task.getAuthor());
         ps.setString(3, task.getContent());
         ps.executeUpdate();
+    }
+
+    public ArrayList<String> getAllContents(String author) throws SQLException {
+        ArrayList<String> contents = new ArrayList<>();
+        Connection conn = DBConnection.getInstance().getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT content FROM tasks WHERE author = ?");
+        ps.setString(1, author);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            String content = rs.getString("content");
+            contents.add(content);
+        }
+        return contents;
     }
 
 }
