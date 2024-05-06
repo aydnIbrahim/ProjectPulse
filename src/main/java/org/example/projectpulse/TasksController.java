@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MSocialTaskController {
+public class TasksController {
 
     @FXML
     private Button addButton;
@@ -130,6 +130,8 @@ public class MSocialTaskController {
         deleteButton.setStyle("-fx-background-color: transparent");
         deleteButton.setCursor(Cursor.HAND);
         deleteButton.setVisible(false);
+        deleteButton.setOnMouseEntered(e -> deleteButton.setGraphic(minusCircleFill));
+        deleteButton.setOnMouseExited(e -> deleteButton.setGraphic(minusCircle));
 
         ImageView tag = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/green.circle.fill.priority.view.png"))));
         if(task.getPriorityPath() != null) {
@@ -153,10 +155,8 @@ public class MSocialTaskController {
 
         completedButton.setOnMouseEntered(e -> completedButton.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px"));
         completedButton.setOnMouseExited(e -> completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 14px; -fx-border-radius: 10"));
-        deleteButton.setOnMouseEntered(e -> deleteButton.setGraphic(minusCircleFill));
-        deleteButton.setOnMouseExited(e -> deleteButton.setGraphic(minusCircle));
 
-        taskBox.getChildren().addAll(tagButton, taskLabel,line, assignButton, assigneeLabel, completedButton, deleteButton, priorityLabel);
+        taskBox.getChildren().addAll(tagButton, taskLabel, line, assignButton, assigneeLabel, completedButton, deleteButton, priorityLabel);
         taskList.getItems().add(taskBox);
     }
 
@@ -339,6 +339,7 @@ public class MSocialTaskController {
             if (!contextMenu.isShowing()) {
                 for (MenuItem menuItem : menuItems) {
                     contextMenu.getItems().add(menuItem);
+                    contextMenu.setStyle("-fx-background-color: white; -fx-background-radius: 10");
                 }
                 contextMenu.show(assignButton, Side.BOTTOM, 0, 0);
             } else contextMenu.hide();
@@ -380,6 +381,7 @@ public class MSocialTaskController {
             green.setGraphic(greenImage);
 
             contextMenu.getItems().addAll(red, orange, yellow, green);
+            contextMenu.setStyle("-fx-background-color: white; -fx-background-radius: 10");
             contextMenu.show(priorityButton, Side.BOTTOM, 0, 0);
 
         }
