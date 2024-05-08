@@ -7,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainPageController {
 
@@ -55,7 +56,6 @@ public class MainPageController {
         selectedButton = clickedButton;
         selectedButton.setStyle("-fx-background-color: #fff; -fx-border-color: #fff; -fx-text-fill: #234232; -fx-border-radius: 10; -fx-background-radius: 10");
 
-        mainPageAnchor.getChildren().clear();
         handleButtonBarClean();
     }
 

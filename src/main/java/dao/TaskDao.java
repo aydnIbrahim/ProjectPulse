@@ -53,6 +53,16 @@ public class TaskDao {
         ps.executeUpdate();
     }
 
+    public void undoComplete(String author, String content) throws SQLException {
+        Connection conn = DBConnection.getInstance().getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE tasks SET completed = ?, undo_completed_date = ? WHERE author = ? AND content = ?");
+        ps.setInt(1, 0);
+        ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+        ps.setString(3, author);
+        ps.setString(4, content);
+        ps.executeUpdate();
+    }
+
     public void deleteTask(String author, String content) throws SQLException {
         Connection conn = DBConnection.getInstance().getConnection();
         PreparedStatement ps = conn.prepareStatement("DELETE FROM tasks WHERE author = ? AND content = ?");

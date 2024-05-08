@@ -30,6 +30,9 @@ public class TasksController {
     private Button addButton;
 
     @FXML
+    private HBox addTaskHbox;
+
+    @FXML
     private Button completedTasks;
 
     @FXML
@@ -64,6 +67,24 @@ public class TasksController {
             }
         });
 
+        completedTasks.setOnAction(event -> {
+            taskList.getItems().clear();
+            try {
+                loadContent(completedTasks.getText());
+                if (completedTasks.getText().equals("Completed Tasks")) {
+                    completedTasks.setText("Ongoing Tasks");
+                    addTaskHbox.setVisible(false);
+                    addTaskHbox.setPrefSize(1000, 0);
+                } else {
+                    completedTasks.setText("Completed Tasks");
+                    addTaskHbox.setVisible(true);
+                    addTaskHbox.setPrefSize(1000, 90);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         addButton.setOnMouseEntered(e -> addButton.setStyle("-fx-background-color: #234232; -fx-border-radius: 10; -fx-background-radius: 10; -fx-text-fill: white"));
         addButton.setOnMouseExited(e -> addButton.setStyle("-fx-background-color: transparent; -fx-border-color: #234232; -fx-border-radius: 10; -fx-border-width: 1px; -fx-text-fill: #234232;"));
         completedTasks.setOnMouseEntered(e -> completedTasks.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white"));
@@ -92,7 +113,22 @@ public class TasksController {
         sortTaskListToPriorityLevel();
     }
 
-    private void addNewTask(Task task) {
+    private void loadContent(String buttonContent) throws SQLException {
+        ArrayList<Task> tasks;
+        TaskDao taskDao = new TaskDao();
+        tasks = taskDao.getAllTask(MainPageController.getAuthor());
+        for (Task task : tasks) {
+            if (buttonContent.equals("Completed Tasks") && task.getCompleted() != 0) {
+                addNewTask(task);
+            } else if (buttonContent.equals("Ongoing Tasks") && task.getCompleted() != 1) {
+                addNewTask(task);
+            }
+        }
+
+        sortTaskListToPriorityLevel();
+    }
+
+    public void addNewTask(Task task) {
         HBox taskBox = new HBox();
 
         Label taskLabel = new Label(task.getContent());
@@ -100,32 +136,33 @@ public class TasksController {
         Label line = new Label("|");
         Label assigneeLabel = new Label(Optional.ofNullable(task.getAssignee()).filter(s -> !s.isEmpty()).orElse("Idle Task"));
 
-        Button completedButton = new Button("Completed");
+        Button completeButton = new Button();
         Button deleteButton = new Button();
         Button tagButton = new Button();
         Button assignButton = new Button();
 
         taskBox.setAlignment(Pos.CENTER_LEFT);
         taskBox.setSpacing(5);
-        taskBox.setPadding(new Insets(0, 0, 0, 10));
+        taskBox.setPadding(new Insets(0, 10, 0, 0));
 
         taskLabel.setPrefSize(514, 17);
-        taskLabel.setStyle("-fx-font-size: 14");
+        taskLabel.setStyle("-fx-font-size: 14px");
 
         assigneeLabel.setPrefSize(175, 17);
-        assigneeLabel.setStyle("-fx-font-size: 14; font-weight: bold; -fx-text-fill: #234232");
+        assigneeLabel.setStyle("-fx-font-size: 14px; font-weight: bold; text-fill: #234232");
 
         priorityLabel.setPrefSize(1, 1);
         priorityLabel.setMinSize(1, 1);
         priorityLabel.setVisible(false);
 
-        completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 14px; -fx-border-radius: 12");
-        completedButton.setPrefSize(100, 30);
-        completedButton.setCursor(Cursor.HAND);
-        completedButton.setVisible(false);
+        completeButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; text-fill: #0D2BC1; -fx-font-size: 14px; -fx-border-radius: 12");
+        completeButton.setPrefSize(100, 30);
+        completeButton.setCursor(Cursor.HAND);
+        completeButton.setVisible(false);
 
         ImageView minusCircle = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.png"))));
         ImageView minusCircleFill = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.fill.png"))));
+
         deleteButton.setGraphic(minusCircle);
         deleteButton.setStyle("-fx-background-color: transparent");
         deleteButton.setCursor(Cursor.HAND);
@@ -151,12 +188,17 @@ public class TasksController {
         assign.setFitHeight(30);
         assignButton.setGraphic(assign);
         assignButton.setStyle("-fx-background-color: transparent");
-        assignButton.setCursor(Cursor.HAND);
 
-        completedButton.setOnMouseEntered(e -> completedButton.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px"));
-        completedButton.setOnMouseExited(e -> completedButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 14px; -fx-border-radius: 10"));
+        completeButton.setOnMouseEntered(e -> completeButton.setStyle("-fx-background-color: #0D2BC1; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px"));
+        completeButton.setOnMouseExited(e -> completeButton.setStyle("-fx-background-color: transparent; -fx-border-color: #0D2BC1; -fx-text-fill: #0D2BC1; -fx-font-size: 14px; -fx-border-radius: 10"));
 
-        taskBox.getChildren().addAll(tagButton, taskLabel, line, assignButton, assigneeLabel, completedButton, deleteButton, priorityLabel);
+        if (task.getCompleted() == 1) {
+            completeButton.setText("Undo");
+        } else {
+            completeButton.setText("Completed");
+            assignButton.setCursor(Cursor.HAND);
+        }
+        taskBox.getChildren().addAll(tagButton, taskLabel, line, assignButton, assigneeLabel, completeButton, deleteButton, priorityLabel);
         taskList.getItems().add(taskBox);
     }
 
@@ -202,7 +244,6 @@ public class TasksController {
 
                 taskDao.saveTask(task);
 
-                // Yeni görevi ekle ve listeyi yeniden sırala
                 addNewTask(task);
                 sortTaskListToPriorityLevel();
                 newTaskField.clear();
@@ -256,7 +297,7 @@ public class TasksController {
             deleteButton.setVisible(true);
             completedButton.setOnAction(event -> {
                 try {
-                    handleTaskListCompletedButton(taskLabel.getText());
+                    handleTaskListCompletedButton(taskLabel.getText(), completedButton.getText());
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -271,13 +312,15 @@ public class TasksController {
                 taskList.getItems().remove(selectedTask);
 
             });
-            handleAssignButton(assignButton, taskLabel.getText(), assigneeLabel);
+            if (completedTasks.getText().equals("Completed Tasks"))
+                handleAssignButton(assignButton, taskLabel.getText(), assigneeLabel);
         }
     }
 
-    private void handleTaskListCompletedButton(String content) throws SQLException {
+    private void handleTaskListCompletedButton(String content, String buttonContent) throws SQLException {
         TaskDao taskDao = new TaskDao();
-        taskDao.completeTask(MainPageController.getAuthor(), content);
+        if (buttonContent.equals("Completed")) taskDao.completeTask(MainPageController.getAuthor(), content);
+        else taskDao.undoComplete(MainPageController.getAuthor(), content);
     }
 
     private void handleTaskListDeleteButton(String content) throws SQLException {
@@ -388,7 +431,4 @@ public class TasksController {
         else contextMenu.hide();
     }
 
-    private void handleCompletedTasksButton() {
-
-    }
 }
