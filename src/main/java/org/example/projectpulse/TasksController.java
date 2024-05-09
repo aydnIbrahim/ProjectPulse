@@ -4,6 +4,7 @@ import dao.EmployeeDao;
 import dao.TaskDao;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +13,8 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import model.Employee;
@@ -145,10 +148,10 @@ public class TasksController {
         taskBox.setSpacing(5);
         taskBox.setPadding(new Insets(0, 10, 0, 0));
 
-        taskLabel.setPrefSize(514, 17);
+        taskLabel.setPrefSize(525, 17);
         taskLabel.setStyle("-fx-font-size: 14px");
 
-        assigneeLabel.setPrefSize(175, 17);
+        assigneeLabel.setPrefSize(165, 17);
         assigneeLabel.setStyle("-fx-font-size: 14px; font-weight: bold; text-fill: #234232");
 
         priorityLabel.setPrefSize(1, 1);
@@ -162,6 +165,7 @@ public class TasksController {
 
         ImageView minusCircle = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.png"))));
         ImageView minusCircleFill = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("Resources/minus.circle.fill.png"))));
+
 
         deleteButton.setGraphic(minusCircle);
         deleteButton.setStyle("-fx-background-color: transparent");
@@ -248,16 +252,10 @@ public class TasksController {
                 sortTaskListToPriorityLevel();
                 newTaskField.clear();
             } else {
-                alertLabel.setText("Task already exists!");
-                alertLabel.setStyle("-fx-text-fill: #FF2600; -fx-font-size: 18px");
-
-                Timeline timeline = new Timeline(new KeyFrame(
-                        Duration.seconds(3),
-                        event -> setDefaultAlertLabel()
-                ));
-                timeline.play();
+                alertTimeline("Task already exists!");
             }
         }
+        else alertTimeline("Task cannot be empty!");
     }
 
     private Task getTaskForHandleAddClick(String newTask) {
@@ -429,6 +427,18 @@ public class TasksController {
 
         }
         else contextMenu.hide();
+    }
+
+    private void alertTimeline(String alertText) {
+
+        alertLabel.setText(alertText);
+        alertLabel.setStyle("-fx-text-fill: #FF2600; -fx-font-size: 18px");
+
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.seconds(3),
+                event -> setDefaultAlertLabel()
+        ));
+        timeline.play();
     }
 
 }

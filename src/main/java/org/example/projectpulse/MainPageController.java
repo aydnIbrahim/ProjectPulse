@@ -56,7 +56,8 @@ public class MainPageController {
         selectedButton = clickedButton;
         selectedButton.setStyle("-fx-background-color: #fff; -fx-border-color: #fff; -fx-text-fill: #234232; -fx-border-radius: 10; -fx-background-radius: 10");
 
-        handleButtonBarClean();
+        if (selectedButton != null && selectedButtonBar != null)
+            loadContent(selectedButton.getId(), selectedButtonBar.getId());
     }
 
     private void handleButtonBarClick(Button clickedButton) {
@@ -83,12 +84,6 @@ public class MainPageController {
             }
         }
 
-    }
-
-    private void handleButtonBarClean(){
-        project.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
-        dependency.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
-        task.setStyle("-fx-background-color: transparent; -fx-text-fill: white");
     }
 
     public static String getAuthor() {
