@@ -7,7 +7,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class MainPageController {
 
@@ -40,15 +39,15 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
-        drugtrackingsystem.setOnAction(event -> handleButtonClick(drugtrackingsystem));
-        msocial.setOnAction(event -> handleButtonClick(msocial));
-        todolist.setOnAction(event -> handleButtonClick(todolist));
+        drugtrackingsystem.setOnAction(event -> handleProjectButtonClick(drugtrackingsystem));
+        msocial.setOnAction(event -> handleProjectButtonClick(msocial));
+        todolist.setOnAction(event -> handleProjectButtonClick(todolist));
         project.setOnAction(actionEvent -> handleButtonBarClick(project));
         dependency.setOnAction(actionEvent -> handleButtonBarClick(dependency));
         task.setOnAction(actionEvent -> handleButtonBarClick(task));
     }
 
-    private void handleButtonClick(Button clickedButton) {
+    private void handleProjectButtonClick(Button clickedButton) {
         if (selectedButton != null) {
             selectedButton.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-border-color: #fff; -fx-border-radius: 10; -fx-text-fill: white");
         }
